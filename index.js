@@ -4,12 +4,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 let users = ["ram", "hari"];
+let categories = ["book", "movie"];
 
 app.get('/user', (req, res) => {
     res.send(users);
 });
-
-// 127.0.0.1:3000/add-user?name=shyam
 
 app.post('/add-user', (req, res) => {
     if(req.body.name)
@@ -28,6 +27,34 @@ app.get('/delete-user', (req, res) => {
             return user !== req.query.name;
         });
         res.send("User Deleted");
+    }
+    else
+    {
+        res.send("Please provide name");
+    }
+})
+
+app.get('/category', (req, res) => {
+    res.send(categories);
+});
+
+app.post('/add-category', (req, res) => {
+    if(req.body.name)
+    {
+        categories.push(req.body.name)
+        res.send("category Added")
+    }else{
+        res.send("Please provide name");
+    }
+})
+
+app.get('/delete-category', (req, res) => {
+    if(req.query.name)
+    {
+        categories = categories.filter((category) => {
+            return category !== req.query.name;
+        });
+        res.send("category Deleted");
     }
     else
     {
