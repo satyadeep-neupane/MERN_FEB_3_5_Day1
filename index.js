@@ -1,9 +1,21 @@
 const express = require('express');
 const app = express();
+const uuidv4 = require('uuid').v4;
 
 app.use(express.urlencoded({ extended: true }));
 
-let users = ["ram", "hari"];
+let users = [
+    {
+        id: uuidv4(),
+        name: "user1",
+        email: "user1@gmail.com"
+    },
+    {
+        id: uuidv4(),
+        name: "user2",
+        email: "user2@gmail.com"
+    }
+];
 let categories = ["book", "movie"];
 
 app.get('/user', (req, res) => {
@@ -11,20 +23,24 @@ app.get('/user', (req, res) => {
 });
 
 app.post('/add-user', (req, res) => {
-    if(req.body.name)
+    if(req.body.name && req.body.email)
     {
-        users.push(req.body.name)
+        users.push({
+            id: uuidv4(),
+            name: req.body.name,
+            email: req.body.email
+        })
         res.send("User Added")
     }else{
-        res.send("Please provide name");
+        res.send("Please provide name and email");
     }
 })
 
 app.get('/delete-user', (req, res) => {
-    if(req.query.name)
+    if(req.query.id)
     {
         users = users.filter((user) => {
-            return user !== req.query.name;
+            return user.id !== req.query.id;
         });
         res.send("User Deleted");
     }
@@ -68,3 +84,5 @@ app.listen(3000, () => {
 
 // user2 added a file
 // user 1 added file
+
+console.log(uuidv4());
